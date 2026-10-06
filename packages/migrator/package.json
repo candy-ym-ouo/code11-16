@@ -1,0 +1,29 @@
+{
+  "name": "@heirloom/migrator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "家中物品来历册 · 跨实例家庭数据迁移工具（全量导出 / 目标端校验 / 标识重映射 / 幂等重放 / 快照回滚）",
+  "type": "module",
+  "bin": {
+    "heirloom-migrate": "dist/cli.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "cli": "dotenv -e ../../.env -- tsx src/cli.ts",
+    "demo": "tsx src/demo.ts"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.12",
+    "pg": "^8.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1",
+    "@types/pg": "^8.11.10",
+    "dotenv-cli": "^7.4.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}
