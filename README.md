@@ -132,6 +132,7 @@ pnpm dev                        # api:4000 + web:5173（Vite 代理 /api 到 400
 | `pnpm db:init` / `db:start` / `db:stop` / `db:status` / `db:psql` | 管理项目自带的 PostgreSQL 集群 |
 | `pnpm db:studio` | Prisma Studio 可视化查库 |
 | `pnpm backup` / `pnpm restore <目录>` / `pnpm backup:drill` / `pnpm gc` | 备份 / 恢复 / 恢复演练 / 维护任务 |
+| `pnpm migrate:export` / `migrate:validate` / `migrate:import` / `migrate:rollback` / `migrate:list` | 跨实例家庭迁移：导出 / 目标端校验 / 导入（幂等）/ 回滚 / 批次列表 |
 
 ## 怎么验证它真的能用
 
@@ -302,6 +303,20 @@ pnpm gc   # 手动触发：清理过期回收站、回收孤儿文件、删除�
 ```
 
 API 进程每天也会自动跑一次同样的维护任务。
+
+### 跨实例迁移
+
+换机器或把一个家庭搬到另一个实例时，用迁移工具做**全量导出 → 目标端校验 → 标识重映射导入**，支持幂等重放与回滚：
+
+```bash
+pnpm migrate:export   --family <家庭ID>          # 在源端打包（JSONL + 内容寻址媒体 + sha256 清单）
+pnpm migrate:validate --bundle <迁移包目录>       # 在目标端校验，不写数据
+pnpm migrate:import   --bundle <迁移包目录>       # 校验 + 导入 + 导入后复核（可重复执行）
+pnpm migrate:rollback --run <批次ID> --yes        # 失败可回滚到迁移前快照
+pnpm migrate:list                                 # 查看迁移批次
+```
+
+跨机器时用 `TARGET_DATABASE_URL` / `TARGET_STORAGE_ROOT` 指定目标端；同邮箱账号自动合并（不覆盖密码），分享链接/邀请码是哈希存储，迁移后原链接继续有效。完整说明见 [`docs/跨实例迁移.md`](docs/跨实例迁移.md)。
 
 ## 配置项
 

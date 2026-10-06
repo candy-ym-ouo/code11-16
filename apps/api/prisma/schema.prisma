@@ -444,3 +444,36 @@ model Setting {
   @@id([familyId, key])
   @@map("settings")
 }
+
+/// 跨实例迁移的幂等台账：每个 (bundleId, 实体类型, 源端ID) 对应一个目标端新 ID。
+/// 重放时据此跳过已导入行并重建 ID 映射，保证重复导入结果一致。
+model MigrationRecord {
+  id         String   @id @default(cuid())
+  bundleId   String   @map("bundle_id")
+  entityType String   @map("entity_type")
+  sourceId   String   @map("source_id")
+  targetId   String   @map("target_id")
+  runId      String   @map("run_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([bundleId, entityType, sourceId])
+  @@index([bundleId, entityType])
+  @@map("migration_records")
+}
+
+/// 迁移批次：每次 import 一行，记录快照位置与状态，供失败回滚使用。
+model MigrationRun {
+  id           String    @id @default(cuid())
+  bundleId     String    @map("bundle_id")
+  sourceFamily String    @map("source_family")
+  targetFamily String?   @map("target_family")
+  status       String
+  stats        Json?
+  problems     String[]  @default([])
+  snapshotDir  String?   @map("snapshot_dir")
+  startedAt    DateTime  @default(now()) @map("started_at")
+  finishedAt   DateTime? @map("finished_at")
+
+  @@index([bundleId])
+  @@map("migration_runs")
+}

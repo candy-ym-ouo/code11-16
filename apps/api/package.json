@@ -13,7 +13,13 @@
     "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
     "db:deploy": "dotenv -e ../../.env -- prisma migrate deploy",
     "db:studio": "dotenv -e ../../.env -- prisma studio",
-    "verify:restore": "tsx src/scripts/verify-restore.ts"
+    "verify:restore": "tsx src/scripts/verify-restore.ts",
+    "migrate:export": "dotenv -e ../../.env -- tsx src/migration/cli.ts export",
+    "migrate:validate": "dotenv -e ../../.env -- tsx src/migration/cli.ts validate",
+    "migrate:import": "dotenv -e ../../.env -- tsx src/migration/cli.ts import",
+    "migrate:verify": "dotenv -e ../../.env -- tsx src/migration/cli.ts verify",
+    "migrate:rollback": "dotenv -e ../../.env -- tsx src/migration/cli.ts rollback",
+    "migrate:list": "dotenv -e ../../.env -- tsx src/migration/cli.ts list"
   },
   "prisma": {
     "schema": "prisma/schema.prisma"

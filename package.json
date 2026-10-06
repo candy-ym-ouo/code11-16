@@ -25,6 +25,12 @@
     "restore": "bash scripts/restore.sh",
     "backup:drill": "bash scripts/drill.sh",
     "gc": "bash scripts/gc.sh",
+    "migrate:export": "pnpm --filter @heirloom/api migrate:export",
+    "migrate:validate": "pnpm --filter @heirloom/api migrate:validate",
+    "migrate:import": "pnpm --filter @heirloom/api migrate:import",
+    "migrate:verify": "pnpm --filter @heirloom/api migrate:verify",
+    "migrate:rollback": "pnpm --filter @heirloom/api migrate:rollback",
+    "migrate:list": "pnpm --filter @heirloom/api migrate:list",
     "verify:loop": "bash scripts/verify-loop.sh",
     "test:ui": "node e2e/ui-smoke.mjs"
   },
